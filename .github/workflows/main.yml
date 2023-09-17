@@ -35,7 +35,7 @@ jobs:
     - run: flutter --version
     - run: flutter pub get
     - run: flutter clean
-    - run: flutter build ios --release --no-codesign
+    - run: flutter build ipa
     - name: Upload iPA
       uses: actions/upload-artifact@v3
       with:
@@ -51,7 +51,7 @@ jobs:
         channel: 'stable'
     - run: flutter --version
     - run: flutter pub get
-    - run: flutter build appbundle
+    - run: flutter build apk
     - name: Upload APK
       uses: actions/upload-artifact@v3
       with:
@@ -159,5 +159,5 @@ jobs:
         appId: ${{secrets.FIREBASE_ANDROID_APPID}}
         token: ${{secrets.FIREBASE_TOKEN}}
         group: testers
-        file: app-release.aap
+        file: app-release.apk
     
