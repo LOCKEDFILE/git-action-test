@@ -35,12 +35,12 @@ jobs:
     - run: flutter --version
     - run: flutter pub get
     - run: flutter clean
-    - run: flutter build ios --release --no-codesign
+    - run:  flutter build ipa --release --export-options-plist=ios/Runner/ExportOptions.plist
     - name: Upload iPA
       uses: actions/upload-artifact@v3
       with:
         name: ios-build
-        path: build/ios/iphoneos
+        path: build/ios/ipa
   build_apk:
     name: Build Flutter (Android)
     runs-on: ubuntu-latest
@@ -51,7 +51,7 @@ jobs:
         channel: 'stable'
     - run: flutter --version
     - run: flutter pub get
-    - run: flutter build appbundle
+    - run: flutter build apk
     - name: Upload APK
       uses: actions/upload-artifact@v3
       with:
@@ -135,7 +135,7 @@ jobs:
       with:
         appId: ${{secrets.FIREBASE_IOS_APPID}}
         token: ${{secrets.FIREBASE_TOKEN}}
-        group: testers
+        groups: testers
         file: Runner.ipa
   beta_apk:
     name: Upload Android Beta to Firebase App Distribution
@@ -158,6 +158,6 @@ jobs:
       with:
         appId: ${{secrets.FIREBASE_ANDROID_APPID}}
         token: ${{secrets.FIREBASE_TOKEN}}
-        group: testers
-        file: app-release.aap
+        groups: testers
+        file: app-release.apk
     
