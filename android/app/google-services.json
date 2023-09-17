@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "500088335930",
+    "project_id": "git-action-test-cb97e",
+    "storage_bucket": "git-action-test-cb97e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500088335930:android:76d901c5d93af445c0cf03",
+        "android_client_info": {
+          "package_name": "com.example.git_action_test"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJOSUuMKPkK8btSNatHBENDAeDXfkZJ1I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
