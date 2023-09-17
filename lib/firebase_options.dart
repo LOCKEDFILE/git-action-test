@@ -70,6 +70,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '500088335930',
     projectId: 'git-action-test-cb97e',
     storageBucket: 'git-action-test-cb97e.appspot.com',
-    iosBundleId: 'com.example.gitActionTest',
+    iosBundleId: 'com.example.gitActionTest.hj',
   );
 }
