@@ -11,7 +11,7 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>inc.ulift.cv.dev</key>
-		<string>GithubActions2_Distribution</string>
+		<string>app_distribution_dev</string>
 	</dict>
 	<key>signingCertificate</key>
 	<string>Apple Distribution</string>
