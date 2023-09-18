@@ -66,10 +66,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBECEHm7ZS6DL3WQk62wiDdxRNA2RNe7Zk',
-    appId: '1:500088335930:ios:aaa03c8b338d1b10c0cf03',
+    appId: '1:500088335930:ios:bb6f293e1d2ffbf2c0cf03',
     messagingSenderId: '500088335930',
     projectId: 'git-action-test-cb97e',
     storageBucket: 'git-action-test-cb97e.appspot.com',
-    iosBundleId: 'com.example.gitActionTest.hj',
+    iosBundleId: 'inc.ulift.cv.dev',
   );
 }
