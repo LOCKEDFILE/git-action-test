@@ -3,9 +3,9 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
+  # pull_request:
+  #   branches:
+  #     - master
 jobs:
   # build_web:
   #   name: Build Flutter (Web)
@@ -33,30 +33,42 @@ jobs:
       with:
         channel: 'stable'
     - run: flutter --version
-    - run: flutter pub get
     - run: flutter clean
-    - run:  flutter build ipa --release --export-options-plist=ios/Runner/ExportOptions.plist
+    - run: flutter pub get
+    - run:  flutter build ios --release --no-codesign
+    - name: Export IPA
+      run: |
+        cd ios
+        xcodebuild -workspace Runner.xcworkspace -scheme Runner -sdk iphoneos -configuration Release archive -archivePath $PWD/build/Runner.xcarchive
+        xcodebuild -exportArchive -archivePath $PWD/build/Runner.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath $PWD/build/Runner.ipa
+    - name: Rename IPA
+      run: mv ios/build/Runner.ipa/Runner.ipa ./ExampleApp-SNAPSHOT.ipa
+    - name: Archive IPA
+      uses: actions/upload-artifact@v1
+      with:
+        name: ios-build
+        path: ./ExampleApp-SNAPSHOT.ipa
     - name: Upload iPA
       uses: actions/upload-artifact@v3
       with:
         name: ios-build
-        path: build/ios/ipa
-  build_apk:
-    name: Build Flutter (Android)
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - uses: subosito/flutter-action@v2
-      with:
-        channel: 'stable'
-    - run: flutter --version
-    - run: flutter pub get
-    - run: flutter build apk
-    - name: Upload APK
-      uses: actions/upload-artifact@v3
-      with:
-        name: apk-build
-        path: build/app/outputs/apk/release
+        path: build/ios/iphoneos
+  # build_apk:
+  #   name: Build Flutter (Android)
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - uses: subosito/flutter-action@v2
+  #     with:
+  #       channel: 'stable'
+  #   - run: flutter --version
+  #   - run: flutter pub get
+  #   - run: flutter build apk
+  #   - name: Upload APK
+  #     uses: actions/upload-artifact@v3
+  #     with:
+  #       name: apk-build
+  #       path: build/app/outputs/apk/release
   # deploy_web:
   #   name: Deploy Web to Firebase Hosting
   #   needs: build_web
@@ -131,33 +143,33 @@ jobs:
       with:
         name: ios-build
     - name: Upload IPA
-      uses: wzieba/Firebase-Distribution-Github-Action@v1.0.0
+      uses: wzieba/Firebase-Distribution-Github-Action@v1.6.0
       with:
         appId: ${{secrets.FIREBASE_IOS_APPID}}
-        token: ${{secrets.FIREBASE_TOKEN}}
+        serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
         groups: testers
         file: Runner.ipa
-  beta_apk:
-    name: Upload Android Beta to Firebase App Distribution
-    needs: [build_apk]
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: set up JDK 1.8
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'zulu'
-        java-version: "12.x"
-        cache: 'gradle'
-    - name: Download Artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: apk-build
-    - name: Upload APK
-      uses: wzieba/Firebase-Distribution-Github-Action@v1.0.0
-      with:
-        appId: ${{secrets.FIREBASE_ANDROID_APPID}}
-        token: ${{secrets.FIREBASE_TOKEN}}
-        groups: testers
-        file: app-release.apk
+  # beta_apk:
+  #   name: Upload Android Beta to Firebase App Distribution
+  #   needs: [build_apk]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - name: set up JDK 1.8
+  #     uses: actions/setup-java@v3
+  #     with:
+  #       distribution: 'zulu'
+  #       java-version: "12.x"
+  #       cache: 'gradle'
+  #   - name: Download Artifact
+  #     uses: actions/download-artifact@v3
+  #     with:
+  #       name: apk-build
+  #   - name: Upload APK
+  #     uses: wzieba/Firebase-Distribution-Github-Action@v1.6.0
+  #     with:
+  #       appId: ${{secrets.FIREBASE_ANDROID_APPID}}
+  #       serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+  #       groups: testers
+  #       file: app-release.apk
     
