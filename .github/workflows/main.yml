@@ -220,39 +220,39 @@ jobs:
         with:
           channel: 'stable'
 
-      # Install your project's dependencies
+      Install your project's dependencies
       - run: flutter pub get
-      - run: flutter build ios --release --no-codesign
+      # - run: flutter build ios --release --no-codesign
 
-      - name: Export IPA
-        run: |
-          cd ios
-          xcodebuild -workspace Runner.xcworkspace -scheme Runner -sdk iphoneos -configuration Release archive -archivePath $PWD/build/Runner.xcarchive
-          xcodebuild -exportArchive -archivePath $PWD/build/Runner.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath $PWD/build/Runner.ipa
-      - name: Rename IPA
-        run: mv ios/build/Runner.ipa/Runner.ipa ./ExampleApp-SNAPSHOT.ipa
-      - name: Archive IPA
-        uses: actions/upload-artifact@v1
-        with:
-          name: ios-build
-          path: ./ExampleApp-SNAPSHOT.ipa
-      - name: Upload iPA
-        uses: actions/upload-artifact@v3
-        with:
-          name: ios-build
-          path: build/ios/iphoneos
+      # - name: Export IPA
+      #   run: |
+      #     cd ios
+      #     xcodebuild -workspace Runner.xcworkspace -scheme Runner -sdk iphoneos -configuration Release archive -archivePath $PWD/build/Runner.xcarchive
+      #     xcodebuild -exportArchive -archivePath $PWD/build/Runner.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath $PWD/build/Runner.ipa
+      # - name: Rename IPA
+      #   run: mv ios/build/Runner.ipa/Runner.ipa ./ExampleApp-SNAPSHOT.ipa
+      # - name: Archive IPA
+      #   uses: actions/upload-artifact@v1
+      #   with:
+      #     name: ios-build
+      #     path: ./ExampleApp-SNAPSHOT.ipa
+      # - name: Upload iPA
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: ios-build
+      #     path: build/ios/iphoneos
 
       # Build and sign the ipa using a single flutter command
-      # - name: Building IPA
-      #   run: flutter build ipa --release --export-options-plist=ios/Runner/ExportOptions.plist
+      - name: Building IPA
+        run: flutter build ipa --release --export-options-plist=ios/Runner/ExportOptions.plist
           
       # Collect the file and upload as artifact         
-      # - name: collect ipa artifacts
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #    name: release-ipa
-      #    # Path to the release files
-      #    path: build/ios/ipa/*.ipa
+      - name: collect ipa artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-ipa
+          # Path to the release files
+          path: build/ios/ipa/*.ipa
 
       # Important! Cleanup: remove the certificate and provisioning profile from the runner!
       - name: Clean up keychain and provisioning profile
